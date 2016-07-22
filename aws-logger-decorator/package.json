@@ -1,0 +1,29 @@
+{
+  "name": "aws-logger-decorator",
+  "version": "1.0.0",
+  "description": "Decorator for AWS Lambda functions to set environment for aws-logger",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/**/*.js",
+    "watch": "mocha test/**/*.js --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blackwoodseven/aws-logger.git"
+  },
+  "keywords": [
+    "logger",
+    "aws"
+  ],
+  "author": "Guillem Salas <gs@blackwoodseven.com>",
+  "license": "SEE LICENSE IN License.md",
+  "bugs": {
+    "url": "https://github.com/blackwoodseven/aws-logger/issues"
+  },
+  "homepage": "https://github.com/blackwoodseven/aws-logger",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "rewire": "^2.5.2"
+  }
+}
