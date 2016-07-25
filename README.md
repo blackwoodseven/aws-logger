@@ -42,4 +42,4 @@ exports.someMethod = function(data) {
 You can also mute the logger statement by calling `logger.disableLogging()`. It is really useful to maintain unit test reports clean.
 
 ## Complements
-There is the [aws-logger-decorator](https://github.com/blackwoodseven/aws-logger-decorator), that will take care of initializing the logger to the correct environment when using it on AWS Lambda functions
+There is the [aws-logger-decorator](https://github.com/blackwoodseven/lambda-decorator-aws-logger), that will take care of initializing the logger to the correct environment when using it on AWS Lambda functions
