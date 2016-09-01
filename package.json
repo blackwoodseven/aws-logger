@@ -1,6 +1,6 @@
 {
   "name": "aws-logger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Logger for AWS Lambda functions",
   "main": "index.js",
   "scripts": {
