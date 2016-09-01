@@ -10,7 +10,7 @@ var hasAwsLogger = globalSymbols.indexOf(AWS_LOGGER_STATE_KEY) > -1;
 
 const initializeGlobalState = () => {
   return global[AWS_LOGGER_STATE_KEY] = {
-    currentEnvrionment: null, disableLogging: false
+    currentEnvironment: null, disableLogging: false
   }
 }
 // grab the configuration from the global state

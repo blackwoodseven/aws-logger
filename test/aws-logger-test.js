@@ -110,4 +110,30 @@ describe('AWS Logger', function () {
       expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
     })
   })
+
+  context('when logging to awsLogger.debug', () => {
+    beforeEach(() => {
+      awsLogger.debug(LOG_OBJ)
+    })
+
+    it('logs the object', () => {
+      expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
+    })
+
+    it('tags the log output with [Info] and "[{Envionment}]"', () => {
+      expect(fakeGlobalConsole.lastArguments).to.contain("[Debug]")
+      expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+    })
+  })
+
+  context('when logging to awsLogger.debug on production', () => {
+    beforeEach(() => {
+      awsLogger.setEnvironment('prod')
+      awsLogger.debug(LOG_OBJ)
+    })
+
+    it('should not log anything', () => {
+      expect(fakeGlobalConsole.lastArguments).not.to.exist
+    })
+  })
 })
