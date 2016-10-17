@@ -11,23 +11,23 @@ describe('AWS Logger', function () {
   var fakeGlobalConsole;
   beforeEach(() => {
     fakeGlobalConsole = {
-      trace: function() {
+      trace: function () {
         fakeGlobalConsole.lastArguments = Array.from(arguments);
         fakeGlobalConsole.lastMethod = 'trace';
       },
-      log: function() {
+      log: function () {
         fakeGlobalConsole.lastArguments = Array.from(arguments);
         fakeGlobalConsole.lastMethod = 'log';
       },
-      warn: function() {
+      warn: function () {
         fakeGlobalConsole.lastArguments = Array.from(arguments);
         fakeGlobalConsole.lastMethod = 'warn';
       },
-      info: function() {
+      info: function () {
         fakeGlobalConsole.lastArguments = Array.from(arguments);
         fakeGlobalConsole.lastMethod = 'info';
       },
-      error: function() {
+      error: function () {
         fakeGlobalConsole.lastArguments = Array.from(arguments);
         fakeGlobalConsole.lastMethod = 'error';
       }
@@ -48,21 +48,42 @@ describe('AWS Logger', function () {
   })
 
   context('when logging to awsLogger.error', () => {
-    beforeEach(() => {
-      awsLogger.error(LOG_OBJ)
+    context('when object is not an error', () => {
+      beforeEach(() => {
+        awsLogger.error(LOG_OBJ)
+      })
+
+      it('logs the object', () => {
+        expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
+      })
+
+      it('tags the log output with [Error] and "[{Envionment}]"', () => {
+        expect(fakeGlobalConsole.lastArguments).to.contain("[Error]")
+        expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+      })
     })
 
-    it('logs the object', () => {
-      expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
-    })
+    context('when object is an error', () => {
+      var thrownError;
 
-    it('tags the log output with [Error] and "[{Envionment}]"', () => {
-      expect(fakeGlobalConsole.lastArguments).to.contain("[Error]")
-      expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
-    })
+      beforeEach(() => {
+        try {
+          throw new Error('hi')
+        } catch(err) {
+          thrownError = err
+          awsLogger.error(LOG_OBJ, err)
+        }
+      })
 
-    it('Uses the trace method to ensure stack trace on AWS logs', () => {
-      expect(fakeGlobalConsole.lastMethod).to.equal('trace')
+      it('logs the error including the stacktrace', () => {
+        expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
+        expect(fakeGlobalConsole.lastArguments[3]).to.contain(thrownError.stack)
+      })
+
+      it('tags the log output with [Error] and "[{Envionment}]"', () => {
+        expect(fakeGlobalConsole.lastArguments).to.contain("[Error]")
+        expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+      })
     })
   })
 
