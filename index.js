@@ -1,6 +1,6 @@
-const config = require('./singleton-configuration');
+const config = require('./singleton-configuration')
 const concatToArguments = (logLevel, args) => {
-  return [`[${logLevel}]`].concat(Array.from(args));
+  return [`[${logLevel}]`].concat(Array.from(args))
 }
 
 const createLoggerFn = (logLevel, method) => function () {
@@ -10,7 +10,7 @@ const createLoggerFn = (logLevel, method) => function () {
 const customErrorFn = (logger) => function () {
   // Expands the error to include the stack trace for Error objects. NodeJS 6 has this feature on console.error, but 4.2 not.
   var args = Array.from(arguments).map(x => x instanceof Error ? x.stack : x)
-  return logger.apply(this, args);
+  return logger.apply(this, args)
 }
 
 const debugLog = createLoggerFn('Debug', 'log')

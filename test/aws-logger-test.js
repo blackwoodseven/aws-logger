@@ -1,37 +1,37 @@
-const expect = require('chai').expect,
-  rewire = require('rewire'),
-  awsLogger = rewire('../index');
+const expect = require('chai').expect
+const rewire = require('rewire')
+const awsLogger = rewire('../index')
 
 describe('AWS Logger', function () {
-  const TEST_ENV = "unit-test-env"
+  const TEST_ENV = 'unit-test-env'
   const LOG_OBJ = { some: 'object' }
   /*
    * prepare console spy
    */
-  var fakeGlobalConsole;
+  var fakeGlobalConsole
   beforeEach(() => {
     process.env.disableVerboseLogging = false
 
     fakeGlobalConsole = {
       trace: function () {
-        fakeGlobalConsole.lastArguments = Array.from(arguments);
-        fakeGlobalConsole.lastMethod = 'trace';
+        fakeGlobalConsole.lastArguments = Array.from(arguments)
+        fakeGlobalConsole.lastMethod = 'trace'
       },
       log: function () {
-        fakeGlobalConsole.lastArguments = Array.from(arguments);
-        fakeGlobalConsole.lastMethod = 'log';
+        fakeGlobalConsole.lastArguments = Array.from(arguments)
+        fakeGlobalConsole.lastMethod = 'log'
       },
       warn: function () {
-        fakeGlobalConsole.lastArguments = Array.from(arguments);
-        fakeGlobalConsole.lastMethod = 'warn';
+        fakeGlobalConsole.lastArguments = Array.from(arguments)
+        fakeGlobalConsole.lastMethod = 'warn'
       },
       info: function () {
-        fakeGlobalConsole.lastArguments = Array.from(arguments);
-        fakeGlobalConsole.lastMethod = 'info';
+        fakeGlobalConsole.lastArguments = Array.from(arguments)
+        fakeGlobalConsole.lastMethod = 'info'
       },
       error: function () {
-        fakeGlobalConsole.lastArguments = Array.from(arguments);
-        fakeGlobalConsole.lastMethod = 'error';
+        fakeGlobalConsole.lastArguments = Array.from(arguments)
+        fakeGlobalConsole.lastMethod = 'error'
       }
     }
     awsLogger.__set__('console', fakeGlobalConsole)
@@ -52,7 +52,7 @@ describe('AWS Logger', function () {
       })
 
       it('tags the log output with [Error]', () => {
-        expect(fakeGlobalConsole.lastArguments).to.contain("[Error]")
+        expect(fakeGlobalConsole.lastArguments).to.contain('[Error]')
       })
     })
 
@@ -74,7 +74,7 @@ describe('AWS Logger', function () {
       })
 
       it('tags the log output with [Error]', () => {
-        expect(fakeGlobalConsole.lastArguments).to.contain("[Error]")
+        expect(fakeGlobalConsole.lastArguments).to.contain('[Error]')
 
       })
     })
@@ -90,7 +90,7 @@ describe('AWS Logger', function () {
     })
 
     it('tags the log output with [Warn]', () => {
-      expect(fakeGlobalConsole.lastArguments).to.contain("[Warn]")
+      expect(fakeGlobalConsole.lastArguments).to.contain('[Warn]')
 
     })
   })
@@ -105,7 +105,7 @@ describe('AWS Logger', function () {
     })
 
     it('tags the log output with [Info]', () => {
-      expect(fakeGlobalConsole.lastArguments).to.contain("[Info]")
+      expect(fakeGlobalConsole.lastArguments).to.contain('[Info]')
 
     })
   })
@@ -120,7 +120,7 @@ describe('AWS Logger', function () {
     })
 
     it('tags the log output with [Info]', () => {
-      expect(fakeGlobalConsole.lastArguments).to.contain("[Info]")
+      expect(fakeGlobalConsole.lastArguments).to.contain('[Info]')
 
     })
   })
@@ -135,7 +135,7 @@ describe('AWS Logger', function () {
     })
 
     it('tags the log output with [Debug]', () => {
-      expect(fakeGlobalConsole.lastArguments).to.contain("[Debug]")
+      expect(fakeGlobalConsole.lastArguments).to.contain('[Debug]')
 
     })
   })
