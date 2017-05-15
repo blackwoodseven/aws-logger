@@ -10,6 +10,8 @@ describe('AWS Logger', function () {
    */
   var fakeGlobalConsole;
   beforeEach(() => {
+    process.env.disableVerboseLogging = false
+
     fakeGlobalConsole = {
       trace: function () {
         fakeGlobalConsole.lastArguments = Array.from(arguments);
@@ -39,14 +41,6 @@ describe('AWS Logger', function () {
     awsLogger.__set__('console', console)
   })
 
-  beforeEach(() => {
-    awsLogger.setEnvironment(TEST_ENV)
-  })
-
-  afterEach(() => {
-    awsLogger.setEnvironment(null)
-  })
-
   context('when logging to awsLogger.error', () => {
     context('when object is not an error', () => {
       beforeEach(() => {
@@ -57,9 +51,8 @@ describe('AWS Logger', function () {
         expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
       })
 
-      it('tags the log output with [Error] and "[{Envionment}]"', () => {
+      it('tags the log output with [Error]', () => {
         expect(fakeGlobalConsole.lastArguments).to.contain("[Error]")
-        expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
       })
     })
 
@@ -69,7 +62,7 @@ describe('AWS Logger', function () {
       beforeEach(() => {
         try {
           throw new Error('hi')
-        } catch(err) {
+        } catch (err) {
           thrownError = err
           awsLogger.error(LOG_OBJ, err)
         }
@@ -77,12 +70,12 @@ describe('AWS Logger', function () {
 
       it('logs the error including the stacktrace', () => {
         expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
-        expect(fakeGlobalConsole.lastArguments[3]).to.contain(thrownError.stack)
+        expect(fakeGlobalConsole.lastArguments[2]).to.contain(thrownError.stack)
       })
 
-      it('tags the log output with [Error] and "[{Envionment}]"', () => {
+      it('tags the log output with [Error]', () => {
         expect(fakeGlobalConsole.lastArguments).to.contain("[Error]")
-        expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+
       })
     })
   })
@@ -96,9 +89,9 @@ describe('AWS Logger', function () {
       expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
     })
 
-    it('tags the log output with [Warn] and "[{Envionment}]"', () => {
+    it('tags the log output with [Warn]', () => {
       expect(fakeGlobalConsole.lastArguments).to.contain("[Warn]")
-      expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+
     })
   })
 
@@ -111,9 +104,9 @@ describe('AWS Logger', function () {
       expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
     })
 
-    it('tags the log output with [Info] and "[{Envionment}]"', () => {
+    it('tags the log output with [Info]', () => {
       expect(fakeGlobalConsole.lastArguments).to.contain("[Info]")
-      expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+
     })
   })
 
@@ -126,9 +119,9 @@ describe('AWS Logger', function () {
       expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
     })
 
-    it('tags the log output with [Info] and "[{Envionment}]"', () => {
+    it('tags the log output with [Info]', () => {
       expect(fakeGlobalConsole.lastArguments).to.contain("[Info]")
-      expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+
     })
   })
 
@@ -141,19 +134,19 @@ describe('AWS Logger', function () {
       expect(fakeGlobalConsole.lastArguments).to.contain(LOG_OBJ)
     })
 
-    it('tags the log output with [Info] and "[{Envionment}]"', () => {
+    it('tags the log output with [Debug]', () => {
       expect(fakeGlobalConsole.lastArguments).to.contain("[Debug]")
-      expect(fakeGlobalConsole.lastArguments).to.contain(`[${TEST_ENV}]`)
+
     })
   })
 
-  context('when logging to awsLogger.debug on production', () => {
+  context('when verbose logging is disabled', () => {
     beforeEach(() => {
-      awsLogger.setEnvironment('prod')
+      process.env.disableVerboseLogging = true
       awsLogger.debug(LOG_OBJ)
     })
 
-    it('should not log anything', () => {
+    it('should suppress debug logging', () => {
       expect(fakeGlobalConsole.lastArguments).not.to.exist
     })
   })

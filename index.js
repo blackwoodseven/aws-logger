@@ -1,10 +1,6 @@
 const config = require('./singleton-configuration');
-
 const concatToArguments = (logLevel, args) => {
-  if (config.currentEnvironment == null) {
-    console.warn('[Warn] Missing environment for logging, please call setEnvironment before using the aws-logger.')
-  }
-  return [`[${logLevel}]`, `[${config.currentEnvironment}]`].concat(Array.from(args));
+  return [`[${logLevel}]`].concat(Array.from(args));
 }
 
 const createLoggerFn = (logLevel, method) => function () {
@@ -20,14 +16,14 @@ const customErrorFn = (logger) => function () {
 const debugLog = createLoggerFn('Debug', 'log')
 
 module.exports = {
-  setEnvironment: (env) => config.currentEnvironment = env,
   disableLogging: () => { config.disableLogging = true },
   log: createLoggerFn('Info', 'log'),
   info: createLoggerFn('Info', 'info'),
   warn: createLoggerFn('Warn', 'warn'),
   error: customErrorFn(createLoggerFn('Error', 'error')),
   debug: function () {
-    if (config.currentEnvironment !== 'prod') {
+    const disableVerboseLogging = process.env.disableVerboseLogging === true || process.env.disableVerboseLogging == 'true'
+    if (!disableVerboseLogging) {
       debugLog.apply(this, arguments)
     }
   }
