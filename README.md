@@ -27,10 +27,6 @@ Note that you should specify which version you need by indicating the git tag af
 ```js
 const logger = require('aws-logger')
 
-//on some point, you should specify in which environment you are
-//if you use the aws-logger-decorator, you can avoid this step
-logger.setEnvironment('test')
-
 exports.someMethod = function(data) {
   logger.info('initializing someMethod call with data', data)
 
@@ -41,5 +37,7 @@ exports.someMethod = function(data) {
 ```
 You can also mute the logger statement by calling `logger.disableLogging()`. It is really useful to maintain unit test reports clean.
 
-## Complements
-There is the [lambda-decorator-aws-logger](https://github.com/blackwoodseven/lambda-decorator-aws-logger), that will take care of initializing the logger to the correct environment when using it on AWS Lambda functions
+## Controling logging verbosity
+It may be desirable to disable debug logging in production. For this reason you can supply a enviroment variable named `disableVerboseLogging`.
+
+So `disableVerboseLogging: true` means that `require('aws-logger').debug('Hi, I will not appear in your logs!')` will be supressed.
